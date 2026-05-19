@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mittelmeer & DASH: Ernährung bei AMD & Bluthochdruck</title>
+    <title>Lixl's Rezepte</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
@@ -34,12 +34,13 @@
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         
         /* Base configuration */
         html {
-            font-size: 16px; /* Dynamically adjustable via JS */
+            font-size: 18px; /* Größerer Standardwert für bessere Lesbarkeit auf Mobilgeräten */
             transition: font-size 0.2s ease;
+            scroll-behavior: smooth;
         }
         
         body {
@@ -70,7 +71,7 @@
         body.high-contrast .bg-white,
         body.high-contrast .bg-gradient-to-br {
             background-color: #000000 !important;
-            background-image: none !important; /* Disables gradients to prevent text vanishing */
+            background-image: none !important;
             border: 2px solid #ffff00 !important;
             color: #ffffff !important;
             box-shadow: none !important;
@@ -130,231 +131,151 @@
         body.high-contrast svg {
             stroke: currentColor !important;
         }
-
-        /* Print optimization styles */
-        @media print {
-            .no-print {
-                display: none !important;
-            }
-            body {
-                background: white !important;
-                color: black !important;
-                font-size: 12pt !important;
-            }
-            .print-container {
-                display: block !important;
-                width: 100% !important;
-                max-width: 100% !important;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-            .recipe-card {
-                break-inside: avoid;
-                border: 1px solid #e2e8f0 !important;
-                box-shadow: none !important;
-                background: white !important;
-            }
-        }
     </style>
 </head>
-<body class="text-slate-800 antialiased min-h-screen pb-16">
+<body class="text-slate-800 antialiased min-h-screen pb-24">
 
     <!-- Accessibility Quick Bar (Seh-Hilfe) -->
-    <div class="bg-slate-900 text-white py-2 px-4 text-xs md:text-sm border-b border-slate-800 no-print">
-        <div class="max-w-5xl mx-auto flex flex-wrap justify-between items-center gap-3">
-            <span class="font-semibold flex items-center gap-1.5 text-slate-300">
-                <i data-lucide="accessibility" class="w-4 h-4 text-emerald-400"></i>
-                Seh-Hilfe Einstellungen:
+    <div class="bg-slate-900 text-white py-3 px-4 text-sm border-b border-slate-800">
+        <div class="max-w-4xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
+            <span class="font-bold flex items-center gap-2 text-slate-200 text-base">
+                <i data-lucide="accessibility" class="w-5 h-5 text-emerald-400"></i>
+                Seh-Hilfe:
             </span>
-            <div class="flex items-center gap-4">
+            <div class="flex flex-wrap items-center justify-center gap-4">
                 <!-- Font size controls -->
                 <div class="flex items-center gap-2">
                     <span>Schriftgröße:</span>
-                    <button onclick="changeFontSize(-1)" class="bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded font-bold text-xs" title="Schrift verkleinern">A-</button>
-                    <button onclick="resetFontSize()" class="bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded text-xs" title="Normale Schriftgröße">Standard</button>
-                    <button onclick="changeFontSize(1)" class="bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded font-bold text-sm" title="Schrift vergrößern">A+</button>
+                    <button onclick="changeFontSize(-1)" class="bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded font-bold text-sm" title="Schrift verkleinern">A-</button>
+                    <button onclick="resetFontSize()" class="bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded text-sm font-semibold" title="Normale Schriftgröße">Standard</button>
+                    <button onclick="changeFontSize(1)" class="bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded font-bold text-base" title="Schrift vergrößern">A+</button>
                 </div>
                 <!-- Contrast toggle -->
-                <div class="h-4 w-px bg-slate-700 hidden sm:block"></div>
-                <button onclick="toggleContrast()" class="inline-flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 px-3 py-1 rounded text-xs font-semibold" id="contrast-btn">
-                    <i data-lucide="eye" class="w-3.5 h-3.5 text-amber-400"></i>
-                    <span>Hoher Kontrast (Gelb/Schwarz)</span>
+                <button onclick="toggleContrast()" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 px-4 py-1.5 rounded text-sm font-bold" id="contrast-btn">
+                    <i data-lucide="eye" class="w-4 h-4 text-amber-400"></i>
+                    <span>Hoher Kontrast</span>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Header & Hero Section -->
-    <header class="relative overflow-hidden bg-olive-900 text-white py-16 px-4 md:px-8 shadow-md">
-        <!-- Decorative abstract shapes representing olive leaves/sunshine -->
-        <div class="absolute inset-0 opacity-10 pointer-events-none">
-            <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="90%" cy="10%" r="200" fill="white" />
-                <circle cx="10%" cy="90%" r="300" fill="white" />
-            </svg>
-        </div>
-        
-        <div class="max-w-5xl mx-auto relative z-10 text-center md:text-left">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div class="max-w-2xl">
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-terracotta-500 text-white mb-4">
-                        <i data-lucide="heart" class="w-3.5 h-3.5 fill-current"></i> Herz & Augen im Fokus
-                    </span>
-                    <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 leading-tight">
-                        Genussvoll gegen AMD & Bluthochdruck
-                    </h1>
-                    <p class="text-olive-100 text-lg md:text-xl leading-relaxed font-light">
-                        Die perfekte Verbindung aus der <strong class="text-white font-semibold underline decoration-emerald-400 decoration-2">Mittelmeer-Diät</strong> und dem blutdrucksenkenden <strong class="text-white font-semibold underline decoration-amber-400 decoration-2">DASH-Ansatz</strong>. Wissenschaftlich fundiert, natriumarm und alltagstauglich zubereitet.
-                    </p>
-                </div>
-                <div class="flex flex-wrap gap-3 justify-center md:justify-end no-print">
-                    <button onclick="window.print()" class="inline-flex items-center gap-2 bg-white text-olive-900 hover:bg-olive-50 font-bold px-5 py-3 rounded-lg transition-all shadow-md focus:ring-4 focus:ring-emerald-300">
-                        <i data-lucide="printer" class="w-5 h-5"></i> Plan ausdrucken
-                    </button>
-                </div>
-            </div>
+    <!-- Header & Hero Section (Radikal vereinfacht) -->
+    <header class="bg-olive-900 text-white py-12 px-4 text-center">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-2">
+                Lixl's Rezepte
+            </h1>
+            <p class="text-emerald-300 text-lg md:text-xl font-bold uppercase tracking-wider">
+                Herz & Augen im Fokus
+            </p>
         </div>
     </header>
 
-    <!-- Medical/Nutritional Highlights section -->
-    <section class="max-w-5xl mx-auto -mt-6 px-4 md:px-8 relative z-20 no-print">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-white rounded-xl shadow-lg p-6 border border-olive-100">
-            <div class="flex gap-4 items-start p-2">
-                <div class="p-3 bg-olive-100 rounded-lg text-olive-700 shrink-0">
-                    <i data-lucide="eye" class="w-6 h-6"></i>
-                </div>
-                <div>
-                    <h3 class="font-bold text-lg text-olive-900">AMD-Vorsorge</h3>
-                    <p class="text-sm text-slate-600 mt-1">Reich an Lutein, Zeaxanthin (Blattgemüse) und Omega-3 zum Schutz der Netzhaut.</p>
-                </div>
-            </div>
-            <div class="flex gap-4 items-start p-2 border-t md:border-t-0 md:border-l border-slate-100 md:pl-6">
-                <div class="p-3 bg-terracotta-100 text-terracotta-600 rounded-lg shrink-0">
-                    <i data-lucide="activity" class="w-6 h-6"></i>
-                </div>
-                <div>
-                    <h3 class="font-bold text-lg text-olive-900">DASH-Konzept</h3>
-                    <p class="text-sm text-slate-600 mt-1">Sehr kaliumreich (Gemüse, Nüsse, Bananen) und extrem natriumarm zur Blutdruckregulation.</p>
-                </div>
-            </div>
-            <div class="flex gap-4 items-start p-2 border-t md:border-t-0 md:border-l border-slate-100 md:pl-6">
-                <div class="p-3 bg-amber-50 text-amber-700 rounded-lg shrink-0">
-                    <i data-lucide="check-circle-2" class="w-6 h-6"></i>
-                </div>
-                <div>
-                    <h3 class="font-bold text-lg text-olive-900">Simpel & Alltagstauglich</h3>
-                    <p class="text-sm text-slate-600 mt-1">Schnelle Zubereitung mit leicht erhältlichen Zutaten ohne komplizierte Küchentechniken.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Main Content Grid -->
-    <main class="max-w-5xl mx-auto px-4 md:px-8 mt-10 print-container">
+    <!-- Main Content Area -->
+    <main class="max-w-4xl mx-auto px-4 md:px-6 mt-10">
         
-        <!-- Interactive Daily Planner Panel (No-print) -->
-        <section id="planner-section" class="bg-gradient-to-br from-olive-100 to-olive-50 rounded-xl p-6 mb-10 border border-olive-200 shadow-sm no-print">
-            <div class="flex flex-wrap items-center justify-between gap-4 mb-4 border-b border-olive-200 pb-3">
-                <div class="flex items-center gap-2">
-                    <i data-lucide="calendar-heart" class="text-olive-700 w-6 h-6"></i>
-                    <h2 class="text-xl font-bold text-olive-900">Mein persönlicher AMD-DASH Tagesplan</h2>
-                </div>
-                <button onclick="clearPlanner()" class="text-sm font-bold text-olive-700 underline hover:text-olive-900 transition-colors">Zurücksetzen</button>
-            </div>
-            <p class="text-sm text-slate-600 mb-6">Wählen Sie unten bei Ihren Lieblingsgerichten einfach <strong>„+ Planer“</strong> aus, um sich einen individuellen und gesunden Tag zusammenzustellen.</p>
+        <!-- Step 1 Navigation (Tageszeiten) -->
+        <section id="navigation-area" class="mb-10 text-center">
+            <h2 class="text-xl md:text-2xl font-bold text-slate-900 mb-4 flex items-center justify-center gap-2">
+                <span class="bg-olive-600 text-white w-7 h-7 inline-flex items-center justify-center rounded-full text-base font-bold">1</span>
+                Wählen Sie eine Tageszeit aus:
+            </h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <!-- Frühstück Slot -->
-                <div class="bg-white p-4 rounded-lg border border-slate-200/80 shadow-xs flex flex-col justify-between min-h-[110px]" id="slot-breakfast">
-                    <div>
-                        <span class="text-xs font-bold text-olive-700 tracking-wider uppercase flex items-center gap-1">
-                            <i data-lucide="coffee" class="w-3.5 h-3.5"></i> Frühstück
-                        </span>
-                        <p class="text-sm text-slate-500 mt-2 italic" id="slot-breakfast-text">Noch kein Frühstück gewählt...</p>
-                    </div>
-                </div>
-                <!-- Mittagessen Slot -->
-                <div class="bg-white p-4 rounded-lg border border-slate-200/80 shadow-xs flex flex-col justify-between min-h-[110px]" id="slot-lunch">
-                    <div>
-                        <span class="text-xs font-bold text-terracotta-600 tracking-wider uppercase flex items-center gap-1">
-                            <i data-lucide="utensils" class="w-3.5 h-3.5"></i> Mittagessen
-                        </span>
-                        <p class="text-sm text-slate-500 mt-2 italic" id="slot-lunch-text">Noch kein Mittagessen gewählt...</p>
-                    </div>
-                </div>
-                <!-- Abendessen Slot -->
-                <div class="bg-white p-4 rounded-lg border border-slate-200/80 shadow-xs flex flex-col justify-between min-h-[110px]" id="slot-dinner">
-                    <div>
-                        <span class="text-xs font-bold text-indigo-700 tracking-wider uppercase flex items-center gap-1">
-                            <i data-lucide="moon" class="w-3.5 h-3.5"></i> Abendessen
-                        </span>
-                        <p class="text-sm text-slate-500 mt-2 italic" id="slot-dinner-text">Noch kein Abendessen gewählt...</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="flex justify-end mt-4">
-                <button onclick="printPlanner()" class="hidden text-sm bg-olive-700 hover:bg-olive-800 text-white font-bold px-4 py-2.5 rounded-md transition-colors items-center gap-1.5 shadow-sm" id="btn-print-plan">
-                    <i data-lucide="printer" class="w-4 h-4"></i> Nur diesen Tagesplan drucken
+            <!-- Tab Controls - Große Buttons für Mobilgeräte -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 p-1 bg-slate-200/50 rounded-xl max-w-2xl mx-auto">
+                <button onclick="setTab('all')" id="tab-all" class="py-3 px-2 text-base font-bold rounded-lg transition-all bg-white text-olive-900 shadow-xs">
+                    Alle
+                </button>
+                <button onclick="setTab('breakfast')" id="tab-breakfast" class="py-3 px-2 text-base font-bold rounded-lg transition-all text-slate-700 hover:text-slate-900">
+                    Frühstück
+                </button>
+                <button onclick="setTab('lunch')" id="tab-lunch" class="py-3 px-2 text-base font-bold rounded-lg transition-all text-slate-700 hover:text-slate-900">
+                    Mittag
+                </button>
+                <button onclick="setTab('dinner')" id="tab-dinner" class="py-3 px-2 text-base font-bold rounded-lg transition-all text-slate-700 hover:text-slate-900">
+                    Abend
                 </button>
             </div>
         </section>
 
-        <!-- Search and Tab Controls -->
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 no-print">
-            <!-- Tabs -->
-            <div class="flex p-1 bg-slate-200/70 rounded-lg space-x-1 max-w-md w-full">
-                <button onclick="setTab('all')" id="tab-all" class="flex-1 py-2 text-sm font-bold rounded-md transition-all bg-white text-olive-900 shadow-sm">
-                    Alle Gerichte
-                </button>
-                <button onclick="setTab('breakfast')" id="tab-breakfast" class="flex-1 py-2 text-sm font-bold rounded-md transition-all text-slate-600 hover:text-slate-900">
-                    Frühstück
-                </button>
-                <button onclick="setTab('lunch')" id="tab-lunch" class="flex-1 py-2 text-sm font-bold rounded-md transition-all text-slate-600 hover:text-slate-900">
-                    Mittag
-                </button>
-                <button onclick="setTab('dinner')" id="tab-dinner" class="flex-1 py-2 text-sm font-bold rounded-md transition-all text-slate-600 hover:text-slate-900">
-                    Abend
-                </button>
-            </div>
-
-            <!-- Search -->
-            <div class="relative w-full md:w-80">
-                <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4"></i>
-                <input type="text" id="searchInput" oninput="filterRecipes()" placeholder="Nach Zutat filtern (z.B. Lachs, Spinat)..." class="w-full pl-9 pr-4 py-2 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-olive-600 focus:border-transparent transition-all">
+        <!-- Step 2 Info Header -->
+        <div class="text-center mb-8">
+            <h2 class="text-xl md:text-2xl font-bold text-slate-900 flex items-center justify-center gap-2">
+                <span class="bg-olive-600 text-white w-7 h-7 inline-flex items-center justify-center rounded-full text-base font-bold">2</span>
+                Wählen Sie Ihr Lieblingsgericht aus und klicken Sie auf "+ Planer"
+            </h2>
+            
+            <!-- Search Bar (Glatte, ungerahmte Optik) -->
+            <div class="relative w-full max-w-md mx-auto mt-4">
+                <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5"></i>
+                <input type="text" id="searchInput" oninput="filterRecipes()" placeholder="Nach Zutat suchen (z.B. Lachs, Beeren)..." class="w-full pl-11 pr-4 py-3 text-base bg-white shadow-xs rounded-xl focus:outline-none focus:ring-2 focus:ring-olive-600 transition-all border-0">
             </div>
         </div>
 
-        <!-- Recipe Content Print Layout Wrapper -->
-        <div id="recipes-container" class="space-y-10">
+        <!-- Recipe Content List (Wenig Rahmen, hohe Lesbarkeit) -->
+        <div id="recipes-container" class="space-y-12">
             <!-- Sections will be rendered here dynamically via JS -->
         </div>
+
+        <!-- Step 3 / Personal Planner (Am Ende der Seite) -->
+        <section id="planner-section" class="mt-20 bg-emerald-50/50 rounded-2xl p-6 sm:p-8 shadow-sm">
+            <div class="flex items-center justify-between gap-4 mb-6 pb-4">
+                <div class="flex items-center gap-2">
+                    <span class="bg-olive-600 text-white w-7 h-7 inline-flex items-center justify-center rounded-full text-base font-bold">3</span>
+                    <h2 class="text-2xl font-bold text-olive-900">Mein persönlicher Tagesplan</h2>
+                </div>
+                <button onclick="clearPlanner()" class="text-base font-bold text-olive-700 hover:text-olive-900 transition-colors">Zurücksetzen</button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Frühstück Slot -->
+                <div class="bg-white p-5 rounded-xl shadow-xs flex flex-col justify-between min-h-[130px]" id="slot-breakfast">
+                    <div>
+                        <span class="text-xs font-bold text-olive-700 tracking-wider uppercase flex items-center gap-1.5">
+                            <i data-lucide="coffee" class="w-4 h-4"></i> Frühstück
+                        </span>
+                        <p class="text-base text-slate-500 mt-3" id="slot-breakfast-text">Noch kein Frühstück gewählt</p>
+                    </div>
+                </div>
+                <!-- Mittagessen Slot -->
+                <div class="bg-white p-5 rounded-xl shadow-xs flex flex-col justify-between min-h-[130px]" id="slot-lunch">
+                    <div>
+                        <span class="text-xs font-bold text-terracotta-600 tracking-wider uppercase flex items-center gap-1.5">
+                            <i data-lucide="utensils" class="w-4 h-4"></i> Mittagessen
+                        </span>
+                        <p class="text-base text-slate-500 mt-3" id="slot-lunch-text">Noch kein Mittagessen gewählt</p>
+                    </div>
+                </div>
+                <!-- Abendessen Slot -->
+                <div class="bg-white p-5 rounded-xl shadow-xs flex flex-col justify-between min-h-[130px]" id="slot-dinner">
+                    <div>
+                        <span class="text-xs font-bold text-indigo-700 tracking-wider uppercase flex items-center gap-1.5">
+                            <i data-lucide="moon" class="w-4 h-4"></i> Abendessen
+                        </span>
+                        <p class="text-base text-slate-500 mt-3" id="slot-dinner-text">Noch kein Abendessen gewählt</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
     </main>
 
     <!-- Footer -->
-    <footer class="mt-20 border-t border-slate-200 pt-8 text-center text-xs text-slate-500 no-print">
-        <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p class="leading-relaxed">© 2026 Ernährungstherapie & AMD-Vorsorge. Entwickelt auf Basis aktueller kardiologischer und ophthalmologischer Leitlinien für maximale Lesbarkeit.</p>
-            <div class="flex gap-4">
-                <span class="flex items-center gap-1 text-olive-700 font-semibold"><i data-lucide="heart" class="w-3.5 h-3.5 fill-current"></i> Herzgesund</span>
-                <span class="flex items-center gap-1 text-terracotta-500 font-semibold"><i data-lucide="eye" class="w-3.5 h-3.5"></i> Augenschützend</span>
-            </div>
+    <footer class="mt-24 py-8 text-center text-sm text-slate-500">
+        <div class="max-w-4xl mx-auto px-4">
+            <p class="leading-relaxed">Ernährungstherapie & AMD-Vorsorge. Entwickelt auf Basis kardiologischer und ophthalmologischer Leitlinien.</p>
         </div>
     </footer>
 
-    <!-- Hidden Printable Area (Used to render a beautiful layout purely for print) -->
-    <div id="pure-print-area" class="hidden"></div>
-
     <script>
-        // Data Structure holding the recipes
+        // Data Structure holding the recipes (Gereinigte Texte ohne Kursivschriften)
         const recipeData = {
             breakfast: [
                 { id: 'b1', title: 'Haferbrei (Porridge) mit frischen Beeren', desc: 'Mit Blaubeeren, Walnüssen und einem Teelöffel Leinsamen.', tags: ['Omega-3', 'Antioxidantien', 'Natriumarm'] },
                 { id: 'b2', title: 'Naturjoghurt mit Chiasamen & Apfel', desc: 'Mit einem Esslöffel Chiasamen, Apfelscheiben und einer Prise Zimt.', tags: ['Omega-3', 'Zimt-Effekt', 'Ballaststoffe'] },
                 { id: 'b3', title: 'Vollkorn-Toast mit Avocado', desc: 'Ein Vollkorn-Toast mit zerdrückter Avocado und frischem Koriander oder Schnittlauch.', tags: ['Kalium', 'Einfach ungesättigte Fette'] },
                 { id: 'b4', title: 'Spinat-Tomaten-Omelett / Rührei', desc: 'Mit reichlich Spinat und Tomaten, zubereitet in etwas gesundem Olivenöl.', tags: ['Lutein', 'Protein', 'Gemüse-Power'] },
-                { id: 'b5', title: 'Grüner Avocado-Spinat-Smoothie & Mandeln', desc: 'Ein kleiner Smoothie aus Spinat, Sellerie, Apfel und Avocado, dazu ein paar Mandeln zum Knabben.', tags: ['Blattgrün', 'Kalium', 'Mineralstoffe'] },
+                { id: 'b5', title: 'Grüner Avocado-Spinat-Smoothie & Mandeln', desc: 'Ein kleiner Smoothie aus Spinat, Sellerie, Apfel und Avocado, dazu ein paar Mandeln zum Knabbern.', tags: ['Blattgrün', 'Kalium', 'Mineralstoffe'] },
                 { id: 'b6', title: 'Hüttenkäse mit Beeren & Walnüssen', desc: 'Frischer Hüttenkäse mit einer Handvoll Beeren und gehackten Walnüssen.', tags: ['Protein', 'Omega-3', 'Kohlenhydratarm'] },
                 { id: 'b7', title: 'Tomaten-Frischkäse-Vollkornbrot', desc: 'Ein Vollkornbrot mit fettarmem Frischkäse und frischen Tomatenscheiben.', tags: ['Ballaststoffe', 'Natriumarm', 'Lykopin'] }
             ],
@@ -386,7 +307,7 @@
         };
 
         let currentTab = 'all';
-        let currentFontSize = 16; // default html scale in px
+        let currentFontSize = 18; // Erhöht für bessere Sichtbarkeit
 
         // Render everything on load
         window.addEventListener('DOMContentLoaded', () => {
@@ -406,14 +327,14 @@
 
         // Accessibility Adjustments
         function changeFontSize(direction) {
-            currentFontSize = Math.max(14, Math.min(26, currentFontSize + (direction * 2)));
+            currentFontSize = Math.max(16, Math.min(28, currentFontSize + (direction * 2)));
             document.documentElement.style.fontSize = currentFontSize + 'px';
             localStorage.setItem('fontSize', currentFontSize);
         }
 
         function resetFontSize() {
-            currentFontSize = 16;
-            document.documentElement.style.fontSize = '16px';
+            currentFontSize = 18;
+            document.documentElement.style.fontSize = '18px';
             localStorage.setItem('fontSize', currentFontSize);
         }
 
@@ -426,9 +347,9 @@
         function updateContrastButtonText(isHigh) {
             const btnSpan = document.querySelector('#contrast-btn span');
             if (isHigh) {
-                btnSpan.textContent = "Standard-Kontrast";
+                btnSpan.textContent = "Normaler Kontrast";
             } else {
-                btnSpan.textContent = "Hoher Kontrast (Gelb/Schwarz)";
+                btnSpan.textContent = "Hoher Kontrast";
             }
         }
 
@@ -439,15 +360,15 @@
             tabs.forEach(t => {
                 const btn = document.getElementById(`tab-${t}`);
                 if (t === tab) {
-                    btn.className = "flex-1 py-2.5 text-sm font-bold rounded-md transition-all bg-white text-olive-900 shadow-sm";
+                    btn.className = "py-3 px-2 text-base font-bold rounded-lg transition-all bg-white text-olive-900 shadow-xs";
                 } else {
-                    btn.className = "flex-1 py-2.5 text-sm font-bold rounded-md transition-all text-slate-600 hover:text-slate-900";
+                    btn.className = "py-3 px-2 text-base font-bold rounded-lg transition-all text-slate-700 hover:text-slate-900";
                 }
             });
             renderRecipes();
         }
 
-        // Render recipes list based on active tab and search query
+        // Render recipes list based on active tab and search query (Ganz ohne Rahmen)
         function renderRecipes() {
             const container = document.getElementById('recipes-container');
             container.innerHTML = '';
@@ -456,9 +377,9 @@
 
             // Sections to display
             const sections = [];
-            if (currentTab === 'all' || currentTab === 'breakfast') sections.push({ key: 'breakfast', title: 'Morgen: Kraftvolles Frühstück', icon: 'coffee', color: 'text-olive-700 bg-olive-100' });
-            if (currentTab === 'all' || currentTab === 'lunch') sections.push({ key: 'lunch', title: 'Mittag: Vitalisierende Hauptspeisen', icon: 'utensils', color: 'text-terracotta-600 bg-terracotta-100' });
-            if (currentTab === 'all' || currentTab === 'dinner') sections.push({ key: 'dinner', title: 'Abend: Leichtes & Bekömmliches', icon: 'moon', color: 'text-indigo-700 bg-indigo-100' });
+            if (currentTab === 'all' || currentTab === 'breakfast') sections.push({ key: 'breakfast', title: 'Morgen: Frühstück', icon: 'coffee', color: 'text-olive-700 bg-olive-50' });
+            if (currentTab === 'all' || currentTab === 'lunch') sections.push({ key: 'lunch', title: 'Mittag: Hauptspeisen', icon: 'utensils', color: 'text-terracotta-600 bg-terracotta-100/40' });
+            if (currentTab === 'all' || currentTab === 'dinner') sections.push({ key: 'dinner', title: 'Abend: Leichtes Gericht', icon: 'moon', color: 'text-indigo-700 bg-indigo-50' });
 
             sections.forEach(section => {
                 const filtered = recipeData[section.key].filter(item => {
@@ -468,33 +389,33 @@
 
                 if (filtered.length === 0) return; // Skip empty categories on search
 
-                // Section element
+                // Section element (Arbeitet mit Abstand statt Rahmen)
                 const sectionDiv = document.createElement('div');
-                sectionDiv.className = "recipe-category";
+                sectionDiv.className = "recipe-category py-4";
                 
                 sectionDiv.innerHTML = `
-                    <div class="flex items-center gap-3 mb-6 pb-2 border-b border-slate-200">
-                        <div class="p-2.5 rounded-lg ${section.color}">
-                            <i data-lucide="${section.icon}" class="w-5 h-5"></i>
+                    <div class="flex items-center gap-3 mb-6 pb-2 border-b border-slate-100">
+                        <div class="p-2.5 rounded-xl ${section.color}">
+                            <i data-lucide="${section.icon}" class="w-6 h-6"></i>
                         </div>
                         <h2 class="text-2xl font-bold text-slate-900">${section.title}</h2>
-                        <span class="text-xs text-slate-400 bg-slate-100 px-2.5 py-1 rounded-full font-bold ml-auto">${filtered.length} Rezepte</span>
+                        <span class="text-sm text-slate-400 bg-slate-100 px-3 py-1 rounded-full font-bold ml-auto">${filtered.length}</span>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         ${filtered.map(recipe => `
-                            <div class="recipe-card bg-white p-5 rounded-xl border border-slate-100 hover:border-olive-200 hover:shadow-md transition-all flex flex-col justify-between group">
+                            <div class="recipe-card bg-white p-6 rounded-2xl shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
                                 <div>
-                                    <div class="flex items-start justify-between gap-2 mb-2">
-                                        <h3 class="font-bold text-lg text-slate-800 group-hover:text-olive-700 transition-colors">${recipe.title}</h3>
-                                        <button onclick="addToPlanner('${section.key}', '${recipe.id}')" class="no-print shrink-0 text-xs font-bold text-olive-600 hover:text-white hover:bg-olive-600 border border-olive-200 hover:border-olive-600 px-3 py-2 rounded-md transition-all flex items-center gap-1">
-                                            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Planer
+                                    <div class="flex items-start justify-between gap-3 mb-3">
+                                        <h3 class="font-bold text-lg md:text-xl text-slate-900 group-hover:text-olive-700 transition-colors">${recipe.title}</h3>
+                                        <button onclick="addToPlanner('${section.key}', '${recipe.id}')" class="shrink-0 text-sm font-bold text-olive-700 hover:text-white hover:bg-olive-700 bg-olive-50 px-4 py-2 rounded-xl transition-all flex items-center gap-1.5">
+                                            <i data-lucide="plus" class="w-4 h-4"></i> Planer
                                         </button>
                                     </div>
-                                    <p class="text-sm text-slate-600 leading-relaxed">${recipe.desc}</p>
+                                    <p class="text-base text-slate-600 leading-relaxed">${recipe.desc}</p>
                                 </div>
-                                <div class="mt-4 pt-3 border-t border-slate-50 flex flex-wrap gap-1.5">
+                                <div class="mt-5 pt-3 flex flex-wrap gap-2">
                                     ${recipe.tags.map(tag => `
-                                        <span class="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-olive-50 text-olive-700">
+                                        <span class="inline-block text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-lg bg-olive-50 text-olive-700">
                                             ${tag}
                                         </span>
                                     `).join('')}
@@ -511,7 +432,6 @@
                     <div class="text-center py-16 text-slate-500">
                         <i data-lucide="info" class="w-12 h-12 mx-auto mb-4 text-slate-300"></i>
                         <p class="text-lg font-bold">Keine Gerichte gefunden</p>
-                        <p class="text-sm mt-1">Verändern Sie Ihren Suchbegriff oder wechseln Sie die Kategorie.</p>
                     </div>
                 `;
             }
@@ -522,117 +442,48 @@
             renderRecipes();
         }
 
-        // Add recipe to selected slot
+        // Add recipe to selected slot and auto-scroll back to navigation
         function addToPlanner(type, id) {
             const recipe = recipeData[type].find(r => r.id === id);
             selectedPlanner[type] = recipe;
             updatePlannerUI();
             
-            // Visual bounce feedback on slot
+            // Visual bounce feedback on slot at the bottom
             const slot = document.getElementById(`slot-${type}`);
-            slot.classList.add('ring-2', 'ring-olive-600', 'scale-[1.01]');
+            slot.classList.add('ring-4', 'ring-olive-600', 'scale-[1.02]');
             setTimeout(() => {
-                slot.classList.remove('ring-2', 'ring-olive-600', 'scale-[1.01]');
-            }, 300);
+                slot.classList.remove('ring-4', 'ring-olive-600', 'scale-[1.02]');
+            }, 500);
+
+            // 2.3: Automatisches Zurückscrollen zur Navigation / Sektion 1
+            const navSection = document.getElementById('navigation-area');
+            if (navSection) {
+                navSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
 
-        // Update the visual representation of selected planner items
+        // Update visual planner items (Kein Kursivtext mehr!)
         function updatePlannerUI() {
             const types = ['breakfast', 'lunch', 'dinner'];
-            let hasAnySelection = false;
 
             types.forEach(type => {
                 const textEl = document.getElementById(`slot-${type}-text`);
                 const recipe = selectedPlanner[type];
                 
                 if (recipe) {
-                    hasAnySelection = true;
                     textEl.innerHTML = `
-                        <span class="font-bold text-slate-800 block text-sm mt-1">${recipe.title}</span>
-                        <span class="text-xs text-slate-500 block line-clamp-2 mt-1">${recipe.desc}</span>
+                        <span class="font-bold text-slate-950 block text-base mt-2">${recipe.title}</span>
+                        <span class="text-sm text-slate-600 block line-clamp-2 mt-1">${recipe.desc}</span>
                     `;
                 } else {
-                    textEl.innerHTML = `<span class="italic text-slate-400">Noch kein Gericht ausgewählt...</span>`;
+                    textEl.innerHTML = `<span class="text-slate-400 block mt-2 text-sm">Noch kein Gericht ausgewählt</span>`;
                 }
             });
-
-            const printPlanBtn = document.getElementById('btn-print-plan');
-            if (hasAnySelection) {
-                printPlanBtn.classList.remove('hidden');
-                printPlanBtn.classList.add('inline-flex');
-            } else {
-                printPlanBtn.classList.remove('inline-flex');
-                printPlanBtn.classList.add('hidden');
-            }
         }
 
         function clearPlanner() {
             selectedPlanner = { breakfast: null, lunch: null, dinner: null };
             updatePlannerUI();
-        }
-
-        // Trigger native browser print just for the planned meals
-        function printPlanner() {
-            const printArea = document.getElementById('pure-print-area');
-            
-            // Build printable HTML layout
-            let breakfastHtml = selectedPlanner.breakfast ? `
-                <div style="margin-bottom: 24px;">
-                    <h3 style="color: #4e6450; font-size: 16px; font-family: sans-serif; font-weight: 700; margin-bottom: 4px; border-bottom: 1px solid #e6ebe5; padding-bottom: 4px;">MORGEN: Frühstück</h3>
-                    <p style="font-weight: 700; margin-bottom: 4px; font-family: sans-serif;">${selectedPlanner.breakfast.title}</p>
-                    <p style="color: #4a5568; margin-bottom: 6px; font-family: sans-serif;">${selectedPlanner.breakfast.desc}</p>
-                    <small style="color: #718096; font-size: 11px; font-family: sans-serif;">Schwerpunkt: ${selectedPlanner.breakfast.tags.join(', ')}</small>
-                </div>
-            ` : '';
-
-            let lunchHtml = selectedPlanner.lunch ? `
-                <div style="margin-bottom: 24px;">
-                    <h3 style="color: #c27d38; font-size: 16px; font-family: sans-serif; font-weight: 700; margin-bottom: 4px; border-bottom: 1px solid #fbf0e6; padding-bottom: 4px;">MITTAG: Hauptspeise</h3>
-                    <p style="font-weight: 700; margin-bottom: 4px; font-family: sans-serif;">${selectedPlanner.lunch.title}</p>
-                    <p style="color: #4a5568; margin-bottom: 6px; font-family: sans-serif;">${selectedPlanner.lunch.desc}</p>
-                    <small style="color: #718096; font-size: 11px; font-family: sans-serif;">Schwerpunkt: ${selectedPlanner.lunch.tags.join(', ')}</small>
-                </div>
-            ` : '';
-
-            let dinnerHtml = selectedPlanner.dinner ? `
-                <div style="margin-bottom: 24px;">
-                    <h3 style="color: #4a51a3; font-size: 16px; font-family: sans-serif; font-weight: 700; margin-bottom: 4px; border-bottom: 1px solid #e0e4f8; padding-bottom: 4px;">ABEND: Leichtes Gericht</h3>
-                    <p style="font-weight: 700; margin-bottom: 4px; font-family: sans-serif;">${selectedPlanner.dinner.title}</p>
-                    <p style="color: #4a5568; margin-bottom: 6px; font-family: sans-serif;">${selectedPlanner.dinner.desc}</p>
-                    <small style="color: #718096; font-size: 11px; font-family: sans-serif;">Schwerpunkt: ${selectedPlanner.dinner.tags.join(', ')}</small>
-                </div>
-            ` : '';
-
-            printArea.innerHTML = `
-                <div style="font-family: sans-serif; padding: 40px; color: #1a202c;">
-                    <div style="text-align: center; margin-bottom: 40px; border-bottom: 2px solid #5f7a61; padding-bottom: 20px;">
-                        <h1 style="font-family: sans-serif; font-weight: 800; font-size: 26px; color: #2c3e2e; margin: 0 0 8px 0;">Mein AMD & Blutdruck Ernährungsplan</h1>
-                        <p style="font-size: 14px; color: #4a5568; margin: 0;">Zusammengestellt nach der herz- und augenfreundlichen DASH- & Mittelmeer-Diät</p>
-                    </div>
-                    
-                    ${breakfastHtml}
-                    ${lunchHtml}
-                    ${dinnerHtml}
-
-                    <div style="margin-top: 50px; padding: 20px; background-color: #f7fafc; border-radius: 8px; font-size: 12px; line-height: 1.6; border: 1px solid #e2e8f0; font-family: sans-serif;">
-                        <p style="margin: 0; font-weight: 700; color: #2c3e2e;">Wichtige Leitlinien für den Alltag:</p>
-                        <ul style="margin: 8px 0 0 0; padding-left: 20px;">
-                            <li><strong>Natriumarm kochen:</strong> Verwenden Sie Kräuter wie Rosmarin, Basilikum, Petersilie und Koriander statt Speisesalz.</li>
-                            <li><strong>Gesunde Fette:</strong> Kaltgepresstes Olivenöl, Chiasamen, Leinsamen und Walnüsse liefern essenzielle Fettsäuren für Netzhaut und Gefäße.</li>
-                            <li><strong>Grünes Blattgemüse:</strong> Spinat und Brokkoli sind extrem reich an Lutein – das geniale "Schutzschild" Ihrer Makula.</li>
-                        </ul>
-                    </div>
-                </div>
-            `;
-
-            // Open a printing frame or temporally swap body for printing
-            const originalContent = document.body.innerHTML;
-            document.body.innerHTML = printArea.innerHTML;
-            window.print();
-            
-            // Restore interactive view
-            document.body.innerHTML = originalContent;
-            window.location.reload(); // Reload to quickly rebind JS triggers easily
         }
     </script>
 </body>
