@@ -54,7 +54,7 @@
             letter-spacing: -0.02em;
         }
 
-        /* High Contrast Mode Styles */
+        /* High Contrast Mode Styles (Now active by default) */
         body.high-contrast {
             background-color: #000000 !important;
             color: #ffffff !important;
@@ -89,7 +89,7 @@
 
         body.high-contrast a,
         body.high-contrast button,
-        body.high-contrast .text-olive-700,
+        body.high-contrast .text-slate-700,
         body.high-contrast .text-terracotta-600,
         body.high-contrast .text-indigo-700 {
             color: #ffff00 !important;
@@ -112,11 +112,13 @@
             color: #000000 !important;
         }
 
-        body.high-contrast .bg-olive-50,
-        body.high-contrast .bg-olive-100,
-        body.high-contrast .bg-slate-200\/70,
+        body.high-contrast .bg-slate-50,
         body.high-contrast .bg-slate-100,
-        body.high-contrast .bg-slate-50 {
+        body.high-contrast .bg-slate-200\/70,
+        body.high-contrast .bg-slate-200,
+        body.high-contrast .bg-indigo-50,
+        body.high-contrast .bg-terracotta-100\/40,
+        body.high-contrast .bg-black {
             background-color: #111111 !important;
             background-image: none !important;
             border: 1px solid #ffffff !important;
@@ -133,13 +135,13 @@
         }
     </style>
 </head>
-<body class="text-slate-800 antialiased min-h-screen pb-24">
+<body class="high-contrast text-slate-800 antialiased min-h-screen pb-24">
 
     <!-- Accessibility Quick Bar (Seh-Hilfe) -->
     <div class="bg-slate-900 text-white py-3 px-4 text-sm border-b border-slate-800">
         <div class="max-w-4xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
             <span class="font-bold flex items-center gap-2 text-slate-200 text-base">
-                <i data-lucide="accessibility" class="w-5 h-5 text-emerald-400"></i>
+                <i data-lucide="accessibility" class="w-5 h-5 text-amber-400"></i>
                 Seh-Hilfe:
             </span>
             <div class="flex flex-wrap items-center justify-center gap-4">
@@ -153,19 +155,19 @@
                 <!-- Contrast toggle -->
                 <button onclick="toggleContrast()" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 px-4 py-1.5 rounded text-sm font-bold" id="contrast-btn">
                     <i data-lucide="eye" class="w-4 h-4 text-amber-400"></i>
-                    <span>Hoher Kontrast</span>
+                    <span>Normaler Kontrast</span>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Header & Hero Section (Radikal vereinfacht) -->
-    <header class="bg-olive-900 text-white py-12 px-4 text-center">
+    <!-- Header & Hero Section (Ohne Grün) -->
+    <header class="bg-slate-900 text-white py-12 px-4 text-center">
         <div class="max-w-4xl mx-auto">
             <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-2">
                 Lixl's Rezepte
             </h1>
-            <p class="text-emerald-300 text-lg md:text-xl font-bold uppercase tracking-wider">
+            <p class="text-amber-400 text-lg md:text-xl font-bold uppercase tracking-wider">
                 Herz & Augen im Fokus
             </p>
         </div>
@@ -177,13 +179,13 @@
         <!-- Step 1 Navigation (Tageszeiten) -->
         <section id="navigation-area" class="mb-10 text-center">
             <h2 class="text-xl md:text-2xl font-bold text-slate-900 mb-4 flex items-center justify-center gap-2">
-                <span class="bg-olive-600 text-white w-7 h-7 inline-flex items-center justify-center rounded-full text-base font-bold">1</span>
-                Wählen Sie eine Tageszeit aus:
+                <span class="bg-slate-800 text-white w-7 h-7 inline-flex items-center justify-center rounded-full text-base font-bold">1</span>
+                Tageszeit auswählen:
             </h2>
             
             <!-- Tab Controls - Große Buttons für Mobilgeräte -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 p-1 bg-slate-200/50 rounded-xl max-w-2xl mx-auto">
-                <button onclick="setTab('all')" id="tab-all" class="py-3 px-2 text-base font-bold rounded-lg transition-all bg-white text-olive-900 shadow-xs">
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 p-1 bg-slate-200/50 rounded-xl max-w-3xl mx-auto">
+                <button onclick="setTab('all')" id="tab-all" class="py-3 px-2 text-base font-bold rounded-lg transition-all bg-white text-slate-900 shadow-xs">
                     Alle
                 </button>
                 <button onclick="setTab('breakfast')" id="tab-breakfast" class="py-3 px-2 text-base font-bold rounded-lg transition-all text-slate-700 hover:text-slate-900">
@@ -195,20 +197,23 @@
                 <button onclick="setTab('dinner')" id="tab-dinner" class="py-3 px-2 text-base font-bold rounded-lg transition-all text-slate-700 hover:text-slate-900">
                     Abend
                 </button>
+                <button onclick="scrollToPlanner()" id="tab-planner-nav" class="col-span-2 sm:col-span-1 py-3 px-2 text-base font-bold rounded-lg transition-all text-slate-900 bg-slate-200 hover:bg-slate-300 flex items-center justify-center gap-1.5" title="Zum Tagesplan springen">
+                    <i data-lucide="calendar" class="w-4 h-4"></i> Tagesplan
+                </button>
             </div>
         </section>
 
         <!-- Step 2 Info Header -->
         <div class="text-center mb-8">
             <h2 class="text-xl md:text-2xl font-bold text-slate-900 flex items-center justify-center gap-2">
-                <span class="bg-olive-600 text-white w-7 h-7 inline-flex items-center justify-center rounded-full text-base font-bold">2</span>
-                Wählen Sie Ihr Lieblingsgericht aus und klicken Sie auf "+ Planer"
+                <span class="bg-slate-800 text-white w-7 h-7 inline-flex items-center justify-center rounded-full text-base font-bold">2</span>
+                Lieblingsgericht auswählen und "+Planer" klicken
             </h2>
             
             <!-- Search Bar (Glatte, ungerahmte Optik) -->
             <div class="relative w-full max-w-md mx-auto mt-4">
                 <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5"></i>
-                <input type="text" id="searchInput" oninput="filterRecipes()" placeholder="Nach Zutat suchen (z.B. Lachs, Beeren)..." class="w-full pl-11 pr-4 py-3 text-base bg-white shadow-xs rounded-xl focus:outline-none focus:ring-2 focus:ring-olive-600 transition-all border-0">
+                <input type="text" id="searchInput" oninput="filterRecipes()" placeholder="Nach Zutat suchen (z.B. Lachs, Beeren)..." class="w-full pl-11 pr-4 py-3 text-base bg-white shadow-xs rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-600 transition-all border-0">
             </div>
         </div>
 
@@ -218,20 +223,20 @@
         </div>
 
         <!-- Step 3 / Personal Planner (Am Ende der Seite) -->
-        <section id="planner-section" class="mt-20 bg-emerald-50/50 rounded-2xl p-6 sm:p-8 shadow-sm">
+        <section id="planner-section" class="mt-20 bg-slate-100/70 rounded-2xl p-6 sm:p-8 shadow-sm">
             <div class="flex items-center justify-between gap-4 mb-6 pb-4">
                 <div class="flex items-center gap-2">
-                    <span class="bg-olive-600 text-white w-7 h-7 inline-flex items-center justify-center rounded-full text-base font-bold">3</span>
-                    <h2 class="text-2xl font-bold text-olive-900">Mein persönlicher Tagesplan</h2>
+                    <span class="bg-slate-800 text-white w-7 h-7 inline-flex items-center justify-center rounded-full text-base font-bold">3</span>
+                    <h2 class="text-2xl font-bold text-slate-900">Mein persönlicher Tagesplan</h2>
                 </div>
-                <button onclick="clearPlanner()" class="text-base font-bold text-olive-700 hover:text-olive-900 transition-colors">Zurücksetzen</button>
+                <button onclick="clearPlanner()" class="text-base font-bold text-slate-700 hover:text-slate-900 transition-colors">Zurücksetzen</button>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Frühstück Slot -->
                 <div class="bg-white p-5 rounded-xl shadow-xs flex flex-col justify-between min-h-[130px]" id="slot-breakfast">
                     <div>
-                        <span class="text-xs font-bold text-olive-700 tracking-wider uppercase flex items-center gap-1.5">
+                        <span class="text-xs font-bold text-slate-700 tracking-wider uppercase flex items-center gap-1.5">
                             <i data-lucide="coffee" class="w-4 h-4"></i> Frühstück
                         </span>
                         <p class="text-base text-slate-500 mt-3" id="slot-breakfast-text">Noch kein Frühstück gewählt</p>
@@ -309,19 +314,25 @@
         let currentTab = 'all';
         let currentFontSize = 18; // Erhöht für bessere Sichtbarkeit
 
-        // Render everything on load
+        // Render everything on load (Default is High Contrast now)
         window.addEventListener('DOMContentLoaded', () => {
             renderRecipes();
             lucide.createIcons();
             
-            // Auto-load state from local storage if existing
+            // Auto-load font size state
             if(localStorage.getItem('fontSize')) {
                 currentFontSize = parseInt(localStorage.getItem('fontSize'));
                 document.documentElement.style.fontSize = currentFontSize + 'px';
             }
-            if(localStorage.getItem('highContrast') === 'true') {
+            
+            // Default High Contrast logic (loads active unless user specifically disabled it)
+            const isHighContrast = localStorage.getItem('highContrast') !== 'false';
+            if (isHighContrast) {
                 document.body.classList.add('high-contrast');
                 updateContrastButtonText(true);
+            } else {
+                document.body.classList.remove('high-contrast');
+                updateContrastButtonText(false);
             }
         });
 
@@ -330,6 +341,13 @@
             currentFontSize = Math.max(16, Math.min(28, currentFontSize + (direction * 2)));
             document.documentElement.style.fontSize = currentFontSize + 'px';
             localStorage.setItem('fontSize', currentFontSize);
+        }
+
+        function scrollToPlanner() {
+            const plannerSection = document.getElementById('planner-section');
+            if (plannerSection) {
+                plannerSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
 
         function resetFontSize() {
@@ -355,12 +373,12 @@
 
         function setTab(tab) {
             currentTab = tab;
-            // Update active state class of tab buttons
+            // Update active state class of tab buttons (No Green)
             const tabs = ['all', 'breakfast', 'lunch', 'dinner'];
             tabs.forEach(t => {
                 const btn = document.getElementById(`tab-${t}`);
                 if (t === tab) {
-                    btn.className = "py-3 px-2 text-base font-bold rounded-lg transition-all bg-white text-olive-900 shadow-xs";
+                    btn.className = "py-3 px-2 text-base font-bold rounded-lg transition-all bg-white text-slate-900 shadow-xs";
                 } else {
                     btn.className = "py-3 px-2 text-base font-bold rounded-lg transition-all text-slate-700 hover:text-slate-900";
                 }
@@ -368,7 +386,7 @@
             renderRecipes();
         }
 
-        // Render recipes list based on active tab and search query (Ganz ohne Rahmen)
+        // Render recipes list based on active tab and search query (Ganz ohne Rahmen, kein Grün)
         function renderRecipes() {
             const container = document.getElementById('recipes-container');
             container.innerHTML = '';
@@ -377,9 +395,30 @@
 
             // Sections to display
             const sections = [];
-            if (currentTab === 'all' || currentTab === 'breakfast') sections.push({ key: 'breakfast', title: 'Morgen: Frühstück', icon: 'coffee', color: 'text-olive-700 bg-olive-50' });
-            if (currentTab === 'all' || currentTab === 'lunch') sections.push({ key: 'lunch', title: 'Mittag: Hauptspeisen', icon: 'utensils', color: 'text-terracotta-600 bg-terracotta-100/40' });
-            if (currentTab === 'all' || currentTab === 'dinner') sections.push({ key: 'dinner', title: 'Abend: Leichtes Gericht', icon: 'moon', color: 'text-indigo-700 bg-indigo-50' });
+            if (currentTab === 'all' || currentTab === 'breakfast') {
+                sections.push({ 
+                    key: 'breakfast', 
+                    title: 'Morgen', 
+                    icon: 'coffee', 
+                    color: 'text-slate-700 bg-slate-100' 
+                });
+            }
+            if (currentTab === 'all' || currentTab === 'lunch') {
+                sections.push({ 
+                    key: 'lunch', 
+                    title: 'Mittag', 
+                    icon: 'utensils', 
+                    color: 'text-terracotta-600 bg-terracotta-100/40' 
+                });
+            }
+            if (currentTab === 'all' || currentTab === 'dinner') {
+                sections.push({ 
+                    key: 'dinner', 
+                    title: 'Abend', 
+                    icon: 'moon', 
+                    color: 'text-white bg-black' // Hintergrund bei Icon bei "Abend" auf schwarz geändert
+                });
+            }
 
             sections.forEach(section => {
                 const filtered = recipeData[section.key].filter(item => {
@@ -406,8 +445,8 @@
                             <div class="recipe-card bg-white p-6 rounded-2xl shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
                                 <div>
                                     <div class="flex items-start justify-between gap-3 mb-3">
-                                        <h3 class="font-bold text-lg md:text-xl text-slate-900 group-hover:text-olive-700 transition-colors">${recipe.title}</h3>
-                                        <button onclick="addToPlanner('${section.key}', '${recipe.id}')" class="shrink-0 text-sm font-bold text-olive-700 hover:text-white hover:bg-olive-700 bg-olive-50 px-4 py-2 rounded-xl transition-all flex items-center gap-1.5">
+                                        <h3 class="font-bold text-lg md:text-xl text-slate-900 group-hover:text-slate-700 transition-colors">${recipe.title}</h3>
+                                        <button onclick="addToPlanner('${section.key}', '${recipe.id}')" class="shrink-0 text-sm font-bold text-slate-700 hover:text-white hover:bg-slate-700 bg-slate-50 px-4 py-2 rounded-xl transition-all flex items-center gap-1.5">
                                             <i data-lucide="plus" class="w-4 h-4"></i> Planer
                                         </button>
                                     </div>
@@ -415,7 +454,7 @@
                                 </div>
                                 <div class="mt-5 pt-3 flex flex-wrap gap-2">
                                     ${recipe.tags.map(tag => `
-                                        <span class="inline-block text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-lg bg-olive-50 text-olive-700">
+                                        <span class="inline-block text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-lg bg-slate-100 text-slate-700">
                                             ${tag}
                                         </span>
                                     `).join('')}
@@ -450,19 +489,19 @@
             
             // Visual bounce feedback on slot at the bottom
             const slot = document.getElementById(`slot-${type}`);
-            slot.classList.add('ring-4', 'ring-olive-600', 'scale-[1.02]');
+            slot.classList.add('ring-4', 'ring-slate-600', 'scale-[1.02]');
             setTimeout(() => {
-                slot.classList.remove('ring-4', 'ring-olive-600', 'scale-[1.02]');
+                slot.classList.remove('ring-4', 'ring-slate-600', 'scale-[1.02]');
             }, 500);
 
-            // 2.3: Automatisches Zurückscrollen zur Navigation / Sektion 1
+            // Automatisches Zurückscrollen zur Navigation / Sektion 1
             const navSection = document.getElementById('navigation-area');
             if (navSection) {
                 navSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
 
-        // Update visual planner items (Kein Kursivtext mehr!)
+        // Update visual planner items (Kein Kursivtext!)
         function updatePlannerUI() {
             const types = ['breakfast', 'lunch', 'dinner'];
 
